@@ -11,9 +11,12 @@ import AVKit
 
 class ViewController: UIViewController {
     
+    var avPlayer: AVPlayer!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        play()
+        //play()
+        playOptionTwo()
     }
     
     /// Play a video on UIView
@@ -23,6 +26,8 @@ class ViewController: UIViewController {
             return
         }
         let player = AVPlayer(url: URL(fileURLWithPath: path))
+        player.actionAtItemEnd = .none
+        
         let playerController = AVPlayerViewController()
         playerController.player = player
         present(playerController, animated: true) {
@@ -35,6 +40,26 @@ class ViewController: UIViewController {
         playerController.player?.play()
         loopVideo(videoPlayer: player)
     }
+    
+    fileprivate func playOptionTwo() {
+        
+        guard let path = Bundle.main.path(forResource: "testVid", ofType:"mp4") else {
+            debugPrint("testVid.mp4 not found")
+            return
+        }
+        
+        avPlayer = AVPlayer(url: URL(fileURLWithPath: path))
+        avPlayer.actionAtItemEnd = .none
+        
+        let videoLayer = AVPlayerLayer(player: avPlayer)
+        videoLayer.frame = view.bounds
+        videoLayer.videoGravity = .resizeAspectFill
+        view.layer.addSublayer(videoLayer)
+        
+        avPlayer.play()
+        loopVideo(videoPlayer: avPlayer)
+    }
+
     
     /// Making the video non-stop
     ///
